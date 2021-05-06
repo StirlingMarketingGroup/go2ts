@@ -1,0 +1,73 @@
+struct {
+    OrderID       bid2.Bid2 `json:"orderID"`
+    InvoiceNumber int       `json:"invoiceNumber"`
+    Name          string    `json:"name"`
+    Active        bool      `json:"active" mysql:"__Active"`
+
+    OrderStatus struct {
+        OrderStatusID int    `json:"orderStatusID"`
+        Name          string `json:"name"`
+    }
+
+    OrderShippingOptions []struct {
+        OrderShippingOptionID bid2.Bid2 `json:"orderShippingOptionID"`
+
+        ShippingOption *struct {
+            ShippingOptionID bid2.Bid2 `json:"shippingOptionID"`
+            FullName         string    `json:"fullName"`
+            Company          string    `json:"company"`
+            Email            string    `json:"email"`
+            AddressLine1     string    `json:"addressLine1"`
+            AddressLine2     string    `json:"addressLine2"`
+            City             string    `json:"city"`
+
+            State *struct {
+                StateID   int    `json:"stateID"`
+                Name      string `json:"name"`
+                StateCode string `json:"stateCode"`
+            } `json:"state,omitempty"`
+
+            Zip   string `json:"zip"`
+            Phone string `json:"phone"`
+
+            Country *struct {
+                CountryID    int    `json:"countryID"`
+                Name         string `json:"name"`
+                CountryCode2 string `json:"countryCode2"`
+                CountryCode3 string `json:"countryCode3"`
+            } `json:"country,omitempty"`
+            TaxExemptCertificateNumber string `json:"taxExemptCertificateNumber"`
+        } `json:"shippingOption,omitempty"`
+
+        OrderShippingOptionShipments []struct {
+            OrderShippingOptionShipmentID bid2.Bid2 `json:"orderShippingOptionShipmentID"`
+
+            Shipment struct {
+                ShipmentID bid2.Bid2 `json:"shipmentID"`
+
+                Carrier struct {
+                    CarrierID int    `json:"carrierID"`
+                    Name      string `json:"name"`
+                    Link      string `json:"link"`
+                } `json:"carrier"`
+
+                ShipmentType struct {
+                    ShipmentTypeID int    `json:"shipmentTypeID"`
+                    Name           string `json:"name"`
+                } `json:"shipmentType"`
+
+                TrackingNumber string          `json:"trackingNumber"`
+                Cost           decimal.Decimal `json:"cost,omitempty"`
+                Shipped        bool            `json:"shipped"`
+                Delivered      bool            `json:"delivered"`
+                Returned       bool            `json:"returned"`
+                Exception      bool            `json:"exception"`
+
+                ShipmentPackages []struct {
+                    ShipmentPackageID bid2.Bid2 `json:"shipmentPackageID"`
+                    TrackingNumber    string    `json:"trackingNumber"`
+                } `json:"shipmentPackages,omitempty"`
+            } `json:"shipment"`
+        } `json:"orderShippingOptionShipments,omitempty"`
+    } `json:"orderShippingOptions,omitempty"`
+}

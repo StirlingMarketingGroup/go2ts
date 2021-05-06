@@ -1,0 +1,26 @@
+{{ define "title" }}{{ .Title }} &ndash; {{ .Site.Title }}{{ end }}
+
+{{ define "main" }}
+<div class="container">
+    <p>
+        {{ .Content }}
+    </p>
+</div>
+
+<div class="row bg-primary py-2 text-center g-0 fs-4">
+    <div class="col">
+        Go Struct
+    </div>
+    <div class="col">
+        TypeScript
+    </div>
+</div>
+<div class="row g-0 flex-grow-1">
+    <div class="col">
+        <textarea id="src" class="w-100 h-100 form-control" onfocus="this.select()" oninput="run(this.value)" placeholder="Paste Go here..."></textarea>
+    </div>
+    <div class="col">
+        <textarea id="dst" readonly class="w-100 h-100 form-control" onfocus="this.select()" placeholder="TypeScript will appear here..."></textarea>
+    </div>
+</div>
+{{ end }}

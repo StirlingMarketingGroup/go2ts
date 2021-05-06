@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/codemirror.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/theme/dracula.min.css" rel="stylesheet">
+
+    {{ $style := resources.Get "sass/main.scss" | toCSS | minify | fingerprint }}
+    <link rel="stylesheet" href="{{ $style.Permalink }}">
+    <link href=https://use.fontawesome.com/releases/v5.13.1/css/all.css rel=stylesheet>
+
+    <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
+    <meta name="description" content="{{ .Params.description }}">
+</head>
+
+<body>
+    <header class="site-header shadow-sm">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <div class="container">
+
+                <a class="navbar-brand" href="/">
+                    Golang Struct to TypeScript Interface
+                </a>
+
+                <div>
+                    <a href="https://github.com/StirlingMarketingGroup/go2ts"><i class="fab fa-github"></i> View on Github</a>
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+    <main id="main" class="d-flex flex-column">
+        {{ block "main" . }}
+        <!-- The part of the page that begins to differ between templates -->
+        {{ end }}
+    </main>
+
+    <footer id="footer" class="bg-dark text-white text-center">
+        <div class="py-4">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+
+                        <!-- Copyright -->
+                        <p class="mb-1 mb-md-0">
+                            <b>© <script>document.write(new Date().getFullYear())</script>&nbsp;Stirling Marketing Group</b>
+                            <span class="text-white-50">All Rights Reserved</span>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {{ $js := resources.Get "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" | fingerprint }}
+    <script src="{{ $js.Permalink }}"></script>
+
+    {{/* <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/addon/display/placeholder.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/mode/go/go.min.js"></script> */}}
+
+    {{ $js := resources.Get "js/wasm_exec.js" | fingerprint }}
+    <script src="{{ $js.Permalink }}"></script>
+    {{ $js := resources.Get "js/app.js" | fingerprint }}
+    <script src="{{ $js.Permalink }}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/darkreader/darkreader.min.js"></script>
+    <script>
+        DarkReader.enable({
+            brightness: 100,
+            contrast: 90,
+            sepia: 10
+        });
+    </script>
+
+</body>
+
+</html>
