@@ -68,6 +68,8 @@ func writeType(s *strings.Builder, t ast.Expr, depth int) {
 		s.WriteString("]: ")
 		writeType(s, t.Value, depth)
 		s.WriteByte('}')
+	case *ast.InterfaceType:
+		s.WriteString("any")
 	default:
 		err := fmt.Errorf("unhandled: %s, %T", t, t)
 		fmt.Println(err)
