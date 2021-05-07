@@ -3,6 +3,7 @@ package main
 import (
 	_ "embed"
 	"fmt"
+	"regexp"
 	"strings"
 	"syscall/js"
 
@@ -31,7 +32,14 @@ func getIdent(s string) string {
 
 func writeType(s *strings.Builder, t ast.Expr, depth int) {
 	switch t := t.(type) {
+	case *ast.StarExpr:
+		writeType(s, t.X, depth)
+		s.WriteString(" | undefined")
 	case *ast.ArrayType:
+		if v, ok := t.Elt.(*ast.Ident); ok && v.String() == "byte" {
+			s.WriteString("string")
+			break
+		}
 		writeType(s, t.Elt, depth)
 		s.WriteString("[]")
 	case *ast.StructType:
@@ -54,18 +62,36 @@ func writeType(s *strings.Builder, t ast.Expr, depth int) {
 		default:
 			s.WriteString(longType)
 		}
+	case *ast.MapType:
+		s.WriteString("{ [key: ")
+		writeType(s, t.Key, depth)
+		s.WriteString("]: ")
+		writeType(s, t.Value, depth)
+		s.WriteByte('}')
 	default:
-		panic(fmt.Errorf("unhandled: %s, %T", t, t))
+		err := fmt.Errorf("unhandled: %s, %T", t, t)
+		fmt.Println(err)
+		panic(err)
 	}
+}
+
+var validJSNameRegexp = regexp.MustCompile(`(?m)^[\pL_][\pL\pN_]+$`)
+
+func validJSName(n string) bool {
+	return validJSNameRegexp.MatchString(n)
 }
 
 func writeFields(s *strings.Builder, fields []*ast.Field, depth int) {
 	for _, f := range fields {
-		for i := 0; i < depth+1; i++ {
-			s.WriteString(Indent)
-		}
-
 		optional := false
+
+		var fieldName string
+		if len(f.Names) != 0 && f.Names[0] != nil && len(f.Names[0].Name) != 0 {
+			fieldName = f.Names[0].Name
+		}
+		if len(fieldName) == 0 || 'A' > fieldName[0] || fieldName[0] > 'Z' {
+			continue
+		}
 
 		var name string
 		if f.Tag != nil {
@@ -77,17 +103,31 @@ func writeFields(s *strings.Builder, fields []*ast.Field, depth int) {
 			jsonTag, err := tags.Get("json")
 			if err == nil {
 				name = jsonTag.Name
+				if name == "-" {
+					continue
+				}
+
 				optional = jsonTag.HasOption("omitempty")
 			}
 		}
 
 		if len(name) == 0 {
-			if len(f.Names) != 0 && f.Names[0] != nil {
-				name = f.Names[0].Name
-			}
+			name = fieldName
 		}
 
+		for i := 0; i < depth+1; i++ {
+			s.WriteString(Indent)
+		}
+
+		quoted := !validJSName(name)
+
+		if quoted {
+			s.WriteByte('\'')
+		}
 		s.WriteString(name)
+		if quoted {
+			s.WriteByte('\'')
+		}
 
 		switch t := f.Type.(type) {
 		case *ast.StarExpr:
