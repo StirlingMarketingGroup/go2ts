@@ -1,0 +1,44 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - master  # Set a branch to deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: npm install
+        working-directory: assets
+        run: npm ci
+
+      - name: setup go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+
+      - name: go build
+        working-directory: assets/go
+        run: GOARCH=wasm GOOS=js go build -o ../../static/lib.wasm
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: Build
+        run: hugo --minify
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
