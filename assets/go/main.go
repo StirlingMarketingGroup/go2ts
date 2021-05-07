@@ -173,11 +173,17 @@ func main() {
 	w := new(strings.Builder)
 	name := "MyInterface"
 
+	first := true
+
 	ast.Inspect(f, func(n ast.Node) bool {
 		switch x := n.(type) {
 		case *ast.Ident:
 			name = x.Name
 		case *ast.StructType:
+			if !first {
+				w.WriteString("\n\n")
+			}
+
 			w.WriteString("declare interface ")
 			w.WriteString(name)
 			w.WriteString(" {\n")
@@ -185,6 +191,10 @@ func main() {
 			writeFields(w, x.Fields.List, 0)
 
 			w.WriteByte('}')
+
+			first = false
+
+			// TODO: allow multiple structs
 			return false
 		}
 		return true

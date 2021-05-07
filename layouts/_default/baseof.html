@@ -77,6 +77,15 @@
     {{ $js := resources.Get "js/app.js" | fingerprint }}
     <script src="{{ $js.Permalink }}"></script>
 
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJQYD6K7L7"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-DJQYD6K7L7');
+    </script>
 </body>
 
 </html>
