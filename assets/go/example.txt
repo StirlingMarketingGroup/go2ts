@@ -1,4 +1,4 @@
-struct {
+var order struct {
     OrderID       bid2.Bid2 `json:"orderID"`
     InvoiceNumber int       `json:"invoiceNumber"`
     Name          string    `json:"name"`

@@ -1,36 +1,79 @@
-var src = document.getElementById('src');
-var dst = document.getElementById('dst');
+'use strict';
 
-// var srcEditor = CodeMirror.fromTextArea(src, {
-//     mode: 'go',
-//     theme: 'dracula',
-//     viewportMargin: 0,
-// });
-// // srcEditor.setSize("99%", "100%");
-// srcEditor.on('change', function () {
-//     src.value = srcEditor.getValue();
-//     run();
-// });
-// srcEditor.on('paste', function () {
-//     src.value = srcEditor.getValue();
-//     await run();
+const example =
+`type user struct {
+    ID xid.Xid \`json:"id"\`
+    Name string \`json:"name"\`
+    Age  int \`json:"age,omitempty"\`
 
-//     dstEditor.setValue(dst.value);
-//     dstEditor.execCommand('selectAll');
-//     dstEditor.focus();
-// });
+    Orders []struct {
+        InvoiceNumber int \`json:"invoiceNumber"\`
+        Quantity int \`json:"qty"\`
+        Created time.Time
+    }
 
-// var dstEditor = CodeMirror.fromTextArea(dst, {
-//     mode: 'javascript',
-//     theme: 'dracula',
-//     readOnly: true,
-// });
-// // dstEditor.setSize("99%", "100%");
+    Created time.Time
+}`;
 
-const go = new Go();
+var src, dst;
 
-function run() {
-    WebAssembly.instantiateStreaming(fetch("lib.wasm"), go.importObject).then((result) => {
-        go.run(result.instance).catch(err => dst.value = err);
+// gross global err that we just set from the wasm
+// because throwing isn't possible?
+// and making a function to throw that Go can call gets weird...
+// https://stackoverflow.com/questions/67437284/how-to-throw-js-error-from-go-web-assembly
+var err;
+
+require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs' }});
+require(['vs/editor/editor.main'], function() {
+    monaco.editor.defineTheme('error', {
+        base: 'vs-dark',
+        inherit: true,
+        rules: [
+            { token: 'custom-error', foreground: 'ff0000' },
+        ]
     });
-}
+
+    src = monaco.editor.create(document.getElementById('src'), {
+        value: example,
+        language: 'go',
+        theme: 'error',
+        minimap: {
+            enabled: false
+        }
+    });
+    src.onDidFocusEditorText(() => setTimeout(() => src.setSelection(src.getModel().getFullModelRange()), 100));
+
+    // Register a new language
+    monaco.languages.register({ id: 'error' });
+
+    // Register a tokens provider for the language
+    monaco.languages.setMonarchTokensProvider('error', {
+        tokenizer: {
+            root: [
+                [/.*/, "custom-error"],
+            ]
+        }
+    });
+
+    dst = monaco.editor.create(document.getElementById('dst'), {
+        value: convert(example),
+        language: 'typescript',
+        theme: 'error',
+        minimap: {
+            enabled: false
+        },
+        readOnly: true
+    });
+    dst.onDidFocusEditorText(() => setTimeout(() => dst.setSelection(dst.getModel().getFullModelRange()), 100));
+
+    src.getModel().onDidChangeContent(() => {
+        const ts = convert(src.getModel().getValue());
+        if (ts) {
+            monaco.editor.setModelLanguage(dst.getModel(), "typescript");
+            dst.getModel().setValue(ts);
+        } else {
+            monaco.editor.setModelLanguage(dst.getModel(), "error")
+            dst.getModel().setValue(err);
+        }
+    });
+});

@@ -1,7 +1,14 @@
-$primary: #8e24aa;
-$secondary: #4fc3f7;
+$primary: #44475a;
+$secondary: #44475a;
 
 $enable-rounded:	false;
+
+$body-color: #f8f8f2;
+$body-bg: #282a36;
+
+$link-color: #8be9fd;
+
+$pink: #ff79c6;
 
 @import "../node_modules/bootstrap/scss/functions";
 @import "../node_modules/bootstrap/scss/variables";

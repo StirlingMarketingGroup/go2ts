@@ -8,6 +8,7 @@ import (
 
 	"go/ast"
 	"go/parser"
+	"go/token"
 
 	"github.com/fatih/structtag"
 )
@@ -106,31 +107,60 @@ func writeFields(s *strings.Builder, fields []*ast.Field, depth int) {
 	}
 }
 
-func main() {
-	window := js.Global()
-	doc := window.Get("document")
-
-	src := doc.Call("getElementById", "src")
-
-	f, err := parser.ParseExpr(src.Get("value").String())
-	if err != nil {
-		panic(err)
+func Convert(s string) string {
+	s = strings.TrimSpace(s)
+	if len(s) == 0 {
+		return s
 	}
 
-	s := new(strings.Builder)
-	s.WriteString("declare interface MyInterface {\n")
+	var f ast.Node
+	f, err := parser.ParseExprFrom(token.NewFileSet(), "editor.go", s, parser.SpuriousErrors)
+	if err != nil {
+		s = fmt.Sprintf(`package main
+
+func main() {
+	%s
+}`, s)
+
+		f, err = parser.ParseFile(token.NewFileSet(), "editor.go", s, parser.SpuriousErrors)
+		if err != nil {
+			panic(err)
+		}
+	}
+
+	w := new(strings.Builder)
+	name := "MyInterface"
 
 	ast.Inspect(f, func(n ast.Node) bool {
 		switch x := n.(type) {
+		case *ast.Ident:
+			name = x.Name
 		case *ast.StructType:
-			writeFields(s, x.Fields.List, 0)
+			w.WriteString("declare interface ")
+			w.WriteString(name)
+			w.WriteString(" {\n")
+
+			writeFields(w, x.Fields.List, 0)
 			return false
 		}
 		return true
 	})
 
-	s.WriteByte('}')
+	w.WriteByte('}')
 
-	dst := doc.Call("getElementById", "dst")
-	dst.Set("value", s.String())
+	return w.String()
+}
+
+func main() {
+	js.Global().Set("convert", js.FuncOf(func(this js.Value, args []js.Value) interface{} {
+		defer func() {
+			if r := recover(); r != nil {
+				js.Global().Set("err", fmt.Sprintf("%s", r))
+			}
+		}()
+
+		return js.ValueOf(Convert(args[0].String()))
+	}))
+
+	select {}
 }

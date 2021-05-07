@@ -11,6 +11,7 @@
     {{ $style := resources.Get "sass/main.scss" | toCSS | minify | fingerprint }}
     <link rel="stylesheet" href="{{ $style.Permalink }}">
     <link href=https://use.fontawesome.com/releases/v5.13.1/css/all.css rel=stylesheet>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs/editor/editor.main.min.css" integrity="sha512-RhnuJxgda82cBylRysVDqdpwnBcSkMzxz1+BxGwBPNMzBJlvaOjHz7P2kXELC0bdNxazsNSyJb7KAww0T5iUdQ==" crossorigin="anonymous" />
 
     <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
     <meta name="description" content="{{ .Params.description }}">
@@ -18,7 +19,7 @@
 
 <body>
     <header class="site-header shadow-sm">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <nav class="navbar navbar-expand-lg bg-primary">
             <div class="container">
 
                 <a class="navbar-brand" href="/">
@@ -57,27 +58,24 @@
         </div>
     </footer>
 
-    {{ $js := resources.Get "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" | fingerprint }}
-    <script src="{{ $js.Permalink }}"></script>
-
-    {{/* <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/addon/display/placeholder.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/mode/go/go.min.js"></script> */}}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 
     {{ $js := resources.Get "js/wasm_exec.js" | fingerprint }}
     <script src="{{ $js.Permalink }}"></script>
+    <script>
+    const go = new Go();
+    WebAssembly.instantiateStreaming(fetch("lib.wasm"), go.importObject).then((result) => {
+        go.run(result.instance);
+    });
+    </script>
+
+    <script>
+    delete process; // yeet
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs/loader.min.js" integrity="sha512-+8+MX2hyUZxaUfMJT0ew+rPsrTGiTmCg8oksa6uVE/ZlR/g3SJtyozqcqDGkw/W785xYAvcx1LxXPP+ywD0SNw==" crossorigin="anonymous"></script>
     {{ $js := resources.Get "js/app.js" | fingerprint }}
     <script src="{{ $js.Permalink }}"></script>
-
-    <script src="https://cdn.jsdelivr.net/npm/darkreader/darkreader.min.js"></script>
-    <script>
-        DarkReader.enable({
-            brightness: 100,
-            contrast: 90,
-            sepia: 10
-        });
-    </script>
 
 </body>
 
