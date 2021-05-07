@@ -77,7 +77,7 @@ func writeType(s *strings.Builder, t ast.Expr, depth int) {
 	}
 }
 
-var validJSNameRegexp = regexp.MustCompile(`(?m)^[\pL_][\pL\pN_]+$`)
+var validJSNameRegexp = regexp.MustCompile(`(?m)^[\pL_][\pL\pN_]*$`)
 
 func validJSName(n string) bool {
 	return validJSNameRegexp.MatchString(n)
