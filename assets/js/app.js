@@ -55,25 +55,27 @@ require(['vs/editor/editor.main'], function() {
         }
     });
 
-    dst = monaco.editor.create(document.getElementById('dst'), {
-        value: convert(example),
-        language: 'typescript',
-        theme: 'error',
-        minimap: {
-            enabled: false
-        },
-        readOnly: true
-    });
-    dst.onDidFocusEditorText(() => setTimeout(() => dst.setSelection(dst.getModel().getFullModelRange()), 100));
+    fetch("lib.wasm").then(() => {
+        dst = monaco.editor.create(document.getElementById('dst'), {
+            value: convert(example),
+            language: 'typescript',
+            theme: 'error',
+            minimap: {
+                enabled: false
+            },
+            readOnly: true
+        });
+        dst.onDidFocusEditorText(() => setTimeout(() => dst.setSelection(dst.getModel().getFullModelRange()), 100));
 
-    src.getModel().onDidChangeContent(() => {
-        const ts = convert(src.getModel().getValue());
-        if (ts) {
-            monaco.editor.setModelLanguage(dst.getModel(), "typescript");
-            dst.getModel().setValue(ts);
-        } else {
-            monaco.editor.setModelLanguage(dst.getModel(), "error")
-            dst.getModel().setValue(err);
-        }
+        src.getModel().onDidChangeContent(() => {
+            const ts = convert(src.getModel().getValue());
+            if (ts) {
+                monaco.editor.setModelLanguage(dst.getModel(), "typescript");
+                dst.getModel().setValue(ts);
+            } else {
+                monaco.editor.setModelLanguage(dst.getModel(), "error")
+                dst.getModel().setValue(err);
+            }
+        });
     });
 });
