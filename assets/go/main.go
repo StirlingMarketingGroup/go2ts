@@ -159,6 +159,7 @@ func main() {
 			}
 		}()
 
+		js.Global().Set("err", "")
 		return js.ValueOf(Convert(args[0].String()))
 	}))
 
