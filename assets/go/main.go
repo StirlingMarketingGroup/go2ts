@@ -141,12 +141,12 @@ func main() {
 			w.WriteString(" {\n")
 
 			writeFields(w, x.Fields.List, 0)
+
+			w.WriteByte('}')
 			return false
 		}
 		return true
 	})
-
-	w.WriteByte('}')
 
 	return w.String()
 }
