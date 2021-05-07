@@ -4,13 +4,14 @@ const example =
 `type user struct {
     ID xid.Xid \`json:"id"\`
     Name string \`json:"name"\`
-    age  int \`json:"age,omitempty"\`
+    age  int \`json:"age,omitempty"\` // unexported
 
     Map map[int]*string
 
     Orders []struct {
         InvoiceNumber int \`json:"invoiceNumber"\`
         Quantity int \`json:"qty"\`
+        Details interface{}
         Created time.Time
     }
 
