@@ -10,6 +10,44 @@ This uses Go compiled to web assembly, so sorry IE users. But not really.
 
 Because this is all done with wasm, that means we have no server costs, not even lambda functions! It also means we aren't storing or logging anyone's requests in *any* way.
 
+## Example
+
+An example Go struct...
+
+```go
+type user struct {
+    ID xid.Xid `json:"id"`
+    Name string `json:"name"`
+    age  int `json:"age,omitempty"` // unexported
+
+    Map map[int]*string
+
+    Orders []struct {
+        InvoiceNumber int `json:"invoiceNumber"`
+        Quantity int `json:"qty"`
+        Details interface{}
+        Created time.Time
+    }
+
+    Created time.Time
+}
+```
+... and the generated TypeScript
+```typescript
+declare interface user {
+    id: xid.Xid;
+    name: string;
+    Map: { [key: number]: string | undefined};
+    Orders: {
+        invoiceNumber: number;
+        qty: number;
+        Details: any;
+        Created: string;
+    }[];
+    Created: string;
+}
+```
+
 ## Other tools
 
 - https://github.com/tkrajina/typescriptify-golang-structs
