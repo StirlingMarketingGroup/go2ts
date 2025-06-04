@@ -1,4 +1,14 @@
+
 'use strict';
+
+import './wasm_exec.js';
+
+const go = new Go();
+WebAssembly.instantiateStreaming(fetch('lib.wasm'), go.importObject).then((result) => {
+    go.run(result.instance);
+});
+
+delete globalThis.process;
 
 const example =
 `type user struct {
