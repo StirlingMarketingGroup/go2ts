@@ -11,7 +11,7 @@
     {{ $style := resources.Get "sass/main.scss" | toCSS | minify | fingerprint }}
     <link rel="stylesheet" href="{{ $style.Permalink }}">
     <link href=https://use.fontawesome.com/releases/v5.13.1/css/all.css rel=stylesheet>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs/editor/editor.main.min.css" integrity="sha512-RhnuJxgda82cBylRysVDqdpwnBcSkMzxz1+BxGwBPNMzBJlvaOjHz7P2kXELC0bdNxazsNSyJb7KAww0T5iUdQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/editor/editor.main.min.css" integrity="sha512-NSBo7z5U9w3Y/maVpyxwEzpMKJteo+y3uDNT1M4RuXo8SH2OQfECzuEqbkoDA5Lo2DcWUvxkLrOAtOp/tYLkGg==" crossorigin="anonymous" />
 
     <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
     <meta name="description" content="{{ .Params.description }}">
@@ -64,9 +64,9 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs/loader.min.js" integrity="sha512-+8+MX2hyUZxaUfMJT0ew+rPsrTGiTmCg8oksa6uVE/ZlR/g3SJtyozqcqDGkw/W785xYAvcx1LxXPP+ywD0SNw==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js" integrity="sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw==" crossorigin="anonymous"></script>
     {{ $opts := dict "target" "es2017" "format" "iife" "minify" true "bundle" true }}
     {{ $js := resources.Get "js/app.js" | js.Build $opts | fingerprint }}
     <script src="{{ $js.Permalink }}"></script>

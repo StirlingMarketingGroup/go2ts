@@ -3,9 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {},
   "devDependencies": {
-    "bootstrap": "^5.0.0"
+    "bootstrap": "^5.3.6"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
