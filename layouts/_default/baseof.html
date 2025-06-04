@@ -67,7 +67,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js" integrity="sha512-ZG31AN9z/CQD1YDDAK4RUAvogwbJHv6bHrumrnMLzdCrVu4HeAqrUX7Jsal/cbUwXGfaMUNmQU04tQ8XXl5Znw==" crossorigin="anonymous"></script>
-    {{ $opts := dict "target" "es2017" "format" "iife" "minify" true "bundle" true }}
+    {{ $opts := dict "target" "es2017" "format" "iife" "minify" true "bundle" true "externals" (slice "fs" "crypto" "os" "util") }}
     {{ $js := resources.Get "js/app.js" | js.Build $opts | fingerprint }}
     <script src="{{ $js.Permalink }}"></script>
 
