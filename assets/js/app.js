@@ -1,5 +1,7 @@
 'use strict';
 
+import '../node_modules/bootstrap/dist/js/bootstrap.bundle.js';
+import * as monaco from '../node_modules/monaco-editor/esm/vs/editor/editor.api.js';
 import './wasm_exec.js';
 const go = new Go();
 WebAssembly.instantiateStreaming(fetch('lib.wasm'), go.importObject).then((result) => {
@@ -33,8 +35,7 @@ var src, dst;
 // https://stackoverflow.com/questions/67437284/how-to-throw-js-error-from-go-web-assembly
 var err;
 
-require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs' }});
-require(['vs/editor/editor.main'], function() {
+{
     monaco.editor.defineTheme('error', {
         base: 'vs-dark',
         inherit: true,
@@ -88,4 +89,4 @@ require(['vs/editor/editor.main'], function() {
             }
         });
     });
-});
+}

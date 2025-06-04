@@ -10,6 +10,9 @@ $link-color: #8be9fd;
 
 $pink: #ff79c6;
 
+@import "../node_modules/@fortawesome/fontawesome-free/css/all.css";
+@import "../node_modules/monaco-editor/min/vs/editor/editor.main.css";
+
 @import "../node_modules/bootstrap/scss/functions";
 @import "../node_modules/bootstrap/scss/variables";
 @import "../node_modules/bootstrap/scss/maps";
