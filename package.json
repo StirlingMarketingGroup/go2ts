@@ -1,0 +1,9 @@
+{
+  "name": "go2ts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "pretest": "npm install --prefix assets && mkdir -p .tmp && (cd assets/go && TMPDIR=$(pwd)/../../.tmp GOOS=js GOARCH=wasm go build -o ../../static/lib.wasm)",
+    "test": "mkdir -p .tmp && export TMPDIR=$(pwd)/.tmp && hugo build && go test -v ./..."
+  }
+}

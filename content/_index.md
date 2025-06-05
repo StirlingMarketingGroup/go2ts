@@ -1,6 +1,6 @@
 ---
 title: Golang Struct to TypeScript Interface
-type: index
+layout: index
 ---
 
 This tool converts Go structs to TypeScript interfaces. Paste a Go struct on the left and the TypeScript interface will be generated on the right.

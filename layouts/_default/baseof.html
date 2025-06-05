@@ -5,13 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/codemirror.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/theme/dracula.min.css" rel="stylesheet">
+    {{ range resources.Match `node_modules/**` }}
+        {{ .Publish }}
+    {{ end }}
 
     {{ $style := resources.Get "sass/main.scss" | toCSS | minify | fingerprint }}
-    <link rel="stylesheet" href="{{ $style.Permalink }}">
-    <link href=https://use.fontawesome.com/releases/v5.13.1/css/all.css rel=stylesheet>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs/editor/editor.main.min.css" integrity="sha512-RhnuJxgda82cBylRysVDqdpwnBcSkMzxz1+BxGwBPNMzBJlvaOjHz7P2kXELC0bdNxazsNSyJb7KAww0T5iUdQ==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
     <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
     <meta name="description" content="{{ .Params.description }}">
@@ -64,24 +63,9 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
-
-    {{ $js := resources.Get "js/wasm_exec.js" | fingerprint }}
-    <script src="{{ $js.Permalink }}"></script>
-    <script>
-    const go = new Go();
-    WebAssembly.instantiateStreaming(fetch("lib.wasm"), go.importObject).then((result) => {
-        go.run(result.instance);
-    });
-    </script>
-
-    <script>
-    delete process; // yeet
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.23.0/min/vs/loader.min.js" integrity="sha512-+8+MX2hyUZxaUfMJT0ew+rPsrTGiTmCg8oksa6uVE/ZlR/g3SJtyozqcqDGkw/W785xYAvcx1LxXPP+ywD0SNw==" crossorigin="anonymous"></script>
-    {{ $js := resources.Get "js/app.js" | fingerprint }}
-    <script src="{{ $js.Permalink }}"></script>
+    {{ $opts := dict "target" "es2017" "format" "iife" "minify" true "bundle" true "externals" (slice "fs" "crypto" "os" "util") "loader" (dict "ttf" "data") }}
+    {{ $js := resources.Get "js/app.js" | js.Build $opts | fingerprint }}
+    <script src="{{ $js.RelPermalink }}"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJQYD6K7L7"></script>
