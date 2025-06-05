@@ -56,3 +56,13 @@ declare interface user {
 Those two tools approach this the same way. In fact, one is a fork of the other. Both use Go generation to generate your tagged stucts and convert them to typescript interfaces.
 
 This tool, however, doesn't use Go generation. Instead, we use `go/parser` to parse the provided go into a syntax tree, and then we loop through the `StructType` nodes within the tree to generate our typescript. Doing it this way allows us to convert any struct to typescript via the browser, vs having to tag our structs and generate them all each time. I'm sure their libraries are extremely useful in their workflow, but personally, we like to be a little less coupled than that.
+
+## Testing
+
+Install front-end dependencies and verify the Hugo build:
+
+```bash
+npm test
+```
+
+This runs the `pretest` script to install dependencies in `assets`, and then runs `hugo build` to verify the site builds successfully.

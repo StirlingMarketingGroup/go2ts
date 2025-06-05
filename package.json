@@ -1,0 +1,9 @@
+{
+  "name": "go2ts",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "pretest": "npm install --prefix assets",
+    "test": "hugo build"
+  }
+}
