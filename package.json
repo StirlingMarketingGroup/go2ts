@@ -4,6 +4,6 @@
   "private": true,
   "scripts": {
     "pretest": "npm install --prefix assets",
-    "test": "hugo build"
+    "test": "hugo build && go test -v ./..."
   }
 }
