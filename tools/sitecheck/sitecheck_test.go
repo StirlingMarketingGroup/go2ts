@@ -4,6 +4,7 @@ package sitecheck
 import (
 	"context"
 	"encoding/xml"
+	"log/slog"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -54,7 +55,11 @@ func Test_NoRuntimeErrors(t *testing.T) {
 	defer cancel()
 	ctx, _ = context.WithTimeout(ctx, 30*time.Second)
 
+	slog.Info("starting sitecheck", "pages", len(pages))
+
 	for _, url := range pages {
+		slog.Info("checking page", "url", url)
+
 		var jsErrs, consoleErrs []string
 
 		err := chromedp.Run(ctx,
