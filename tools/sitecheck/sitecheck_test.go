@@ -102,7 +102,17 @@ func Test_NoRuntimeErrors(t *testing.T) {
 	}
 
 	// 2) headless Chrome context
-	ctx, cancel := chromedp.NewContext(context.Background())
+	// allocator with extra Chromium flags
+	opts := append(chromedp.DefaultExecAllocatorOptions[:],
+		chromedp.Flag("ignore-certificate-errors", true),
+	)
+
+	allocCtx, cancelAlloc := chromedp.NewExecAllocator(context.Background(), opts...)
+	defer cancelAlloc()
+
+	// regular browser context inside the allocator
+	ctx, cancel := chromedp.NewContext(allocCtx)
+	defer cancel()
 	defer cancel()
 	ctx, cancelTimeout := context.WithTimeout(ctx, 30*time.Second)
 	defer cancelTimeout()
