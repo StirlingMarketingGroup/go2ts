@@ -1,0 +1,240 @@
+<svg width="500" height="500" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <!--
+      IMPORTANT NOTES FOR MANUFACTURING:
+      1.  VIEWBOX: 1000 units = Coin Diameter. For a 50mm coin, 1 unit = 0.05mm.
+      2.  METAL LINES: All enamel-filled shapes are separated by "metal" lines.
+          The 'stroke-width="10"' on enamel shapes indicates a 0.5mm metal separation line.
+          Areas without a fill (or using url(#metalGradient) in this SVG for visual purposes)
+          are intended to be raised metal on the physical coin.
+      3.  COLORS: Hex codes are used for SVG rendering. For physical enamel, refer to the
+          Pantone Solid Coated (C) codes specified in comments for each color.
+      4.  TEXT AS PATHS: All text has been converted to vector paths for direct manufacturing.
+      5.  HIDDEN BINARY: The binary message is designed as a dark enamel fill on a slightly different blue enamel background for subtlety.
+    -->
+
+    <!-- Visual metal gradient for SVG viewer - for manufacturing, this is the raised metal -->
+    <linearGradient id="metalGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A0A0A0"/>
+      <stop offset="50%" stop-color="#D0D0D0"/>
+      <stop offset="100%" stop-color="#A0A0A0"/>
+    </linearGradient>
+
+    <!-- Define the "metal" style for visual representation in SVG viewers -->
+    <style>
+      .metal-fill {
+        fill: url(#metalGradient);
+      }
+      /* Enamel shapes will be filled with a solid color, and their boundaries will be the metal lines */
+      /* stroke-width: 10 units = 0.5mm metal separation for a 50mm coin */
+      .enamel-shape {
+        stroke: url(#metalGradient); /* Visual representation of metal border */
+        stroke-width: 10;
+        stroke-linejoin: round;
+        stroke-linecap: round;
+      }
+      .enamel-shape-no-stroke { /* For nested enamel within another enamel field */
+        stroke: none;
+      }
+      .hidden-binary-fill {
+        fill: #2F3D78; /* A darker shade of blue, slightly lighter than background */
+        /* Pantone 289 C - very dark blue */
+      }
+    </style>
+
+  </defs>
+
+  <!-- Coin Base - This is the overall metal blank that everything is built upon -->
+  <circle cx="500" cy="500" r="490" class="metal-fill"/>
+
+  <!-- Outer Knurled Edge (Metal) - Represented by the overall shape and the outer diameter -->
+  <!-- The knurling pattern itself would be part of the mold, usually not drawn as individual paths in SVG unless extremely fine -->
+  <!-- For this SVG, the outer circle and teeth are implied by the overall shape and the central elements -->
+
+  <!-- Outer Ring Background Enamel (Dark Blue) -->
+  <!-- Pantone 276 C -->
+  <circle cx="500" cy="500" r="460" fill="#222E64" class="enamel-shape"/>
+
+  <!-- Inner Recessed Metal Ring (Subtle Circuit Board Pattern) -->
+  <!-- This is a raised metal pattern on the dark blue enamel field -->
+  <!-- Simplified representation of circuit board pattern on the dark blue enamel -->
+  <g class="metal-fill">
+    <!-- Main horizontal/vertical lines -->
+    <rect x="200" y="495" width="600" height="10" rx="3" ry="3"/>
+    <rect x="495" y="200" width="10" height="600" rx="3" ry="3"/>
+    <!-- Diagonal lines -->
+    <path d="M220 220 L280 280 M780 220 L720 280 M220 780 L280 720 M780 780 L720 720" stroke="url(#metalGradient)" stroke-width="10" stroke-linecap="round"/>
+    <!-- Connection points/pads -->
+    <circle cx="280" cy="495" r="8"/>
+    <circle cx="495" cy="280" r="8"/>
+    <circle cx="495" cy="715" r="8"/>
+    <circle cx="715" cy="495" r="8"/>
+    <circle cx="400" cy="400" r="8"/>
+    <circle cx="600" cy="400" r="8"/>
+    <circle cx="400" cy="600" r="8"/>
+    <circle cx="600" cy="600" r="8"/>
+    <circle cx="350" cy="250" r="8"/>
+    <circle cx="650" cy="250" r="8"/>
+    <circle cx="350" cy="750" r="8"/>
+    <circle cx="650" cy="750" r="8"/>
+  </g>
+
+  <!-- Outer Metal Ring for Text (Raised Metal) -->
+  <circle cx="500" cy="500" r="400" class="metal-fill"/>
+
+  <!-- Inner Most Metal Ring Around Gopher (Raised Metal) -->
+  <circle cx="500" cy="500" r="230" class="metal-fill"/>
+
+  <!-- Go Gopher (Central Motif) -->
+  <g>
+    <!-- Gopher Body (Go Teal/Blue) -->
+    <!-- Pantone 306 C -->
+    <path d="M500 300 C670 300 670 700 500 700 C330 700 330 300 500 300 Z" fill="#00B3E8" class="enamel-shape"/>
+    <!-- Gopher Belly/Face (White) -->
+    <!-- Pantone White -->
+    <path d="M500 400 C580 400 580 600 500 600 C420 600 420 400 500 400 Z" fill="#FFFFFF" class="enamel-shape"/>
+    <!-- Gopher Eyes (White) -->
+    <!-- Pantone White -->
+    <circle cx="450" cy="380" r="28" fill="#FFFFFF" class="enamel-shape"/>
+    <circle cx="550" cy="380" r="28" fill="#FFFFFF" class="enamel-shape"/>
+    <!-- Gopher Pupils (Black) - Appear as small recessed black dots -->
+    <!-- Pantone Process Black C -->
+    <circle cx="455" cy="385" r="12" fill="#000000" class="enamel-shape-no-stroke"/>
+    <circle cx="545" cy="385" r="12" fill="#000000" class="enamel-shape-no-stroke"/>
+    <!-- Gopher Mouth (Recessed, no fill, just metal boundary) -->
+    <path d="M480 500 Q500 520 520 500" stroke="url(#metalGradient)" stroke-width="8" stroke-linecap="round" fill="none"/>
+    <!-- Gopher Arms (Go Teal/Blue) -->
+    <!-- Pantone 306 C -->
+    <path d="M380 520 C380 480 420 460 440 490 L430 540 C410 560 380 540 380 520 Z" fill="#00B3E8" class="enamel-shape"/>
+    <path d="M620 520 C620 480 580 460 560 490 L570 540 C590 560 620 540 620 520 Z" fill="#00B3E8" class="enamel-shape"/>
+  </g>
+
+  <!-- Hidden Binary Message "yeet" (01111001011001010110010101110100) -->
+  <!-- This appears as recessed dark blue enamel on a slightly lighter recessed dark blue enamel ring -->
+  <!-- The inner ring is defined by the gopher's border, so this is recessed fill. -->
+  <path id="binaryPath" d="M500 500 m -215, 0 a 215,215 0 1,1 430,0 a 215,215 0 1,1 -430,0" fill="none"/>
+  <text class="hidden-binary-fill" font-size="25">
+    <!-- Pantone 289 C -->
+    <textPath xlink:href="#binaryPath" startOffset="50%" text-anchor="middle">
+      <tspan dx="-210">01111001</tspan>
+      <tspan dx="10">01100101</tspan>
+      <tspan dx="10">01100101</tspan>
+      <tspan dx="10">01110100</tspan>
+    </textPath>
+  </text>
+
+  <!-- Hexagon Logos -->
+  <!-- Each G group represents a hexagon. The outer path is the hexagon fill. Inner paths are the logo. -->
+
+  <!-- TypeScript Hexagon (Top-Left) -->
+  <g transform="translate(180 250) scale(0.65)">
+    <!-- Hexagon Enamel (Teal) -->
+    <!-- Pantone 326 C -->
+    <path d="M50 0 L100 29 L100 71 L50 100 L0 71 L0 29 Z" fill="#00CED1" class="enamel-shape"/>
+    <!-- TS Logo (Raised Metal) - converted to paths -->
+    <g class="metal-fill">
+      <!-- Path for T -->
+      <path d="M30.6 28.7h38.8c.8 0 1.5-.6 1.5-1.5s-.6-1.5-1.5-1.5H30.6c-.8 0-1.5.6-1.5 1.5s.6 1.5 1.5 1.5zm19.4 51.5c-2.4 0-4.3 1.9-4.3 4.3v17.2c0 2.4 1.9 4.3 4.3 4.3s4.3-1.9 4.3-4.3V84.5c0-2.4-1.9-4.3-4.3-4.3zm19.4-51.5c.8 0 1.5-.6 1.5-1.5s-.6-1.5-1.5-1.5h-38.8c-.8 0-1.5.6-1.5 1.5s.6 1.5 1.5 1.5h38.8zm-19.4-1.5c.8 0 1.5-.6 1.5-1.5s-.6-1.5-1.5-1.5h-38.8c-.8 0-1.5.6-1.5 1.5s.6 1.5 1.5 1.5h38.8z"/>
+      <!-- Path for S (stylized as in the logo) -->
+      <path d="M70.5 50.8c.8 0 1.5-.6 1.5-1.5s-.6-1.5-1.5-1.5h-10c-.8 0-1.5.6-1.5 1.5s.6 1.5 1.5 1.5h10zm-30.8 19.4c.8 0 1.5-.6 1.5-1.5s-.6-1.5-1.5-1.5h-10c-.8 0-1.5.6-1.5 1.5s.6 1.5 1.5 1.5h10zM50 38.7c2.4 0 4.3-1.9 4.3-4.3V17.2c0-2.4-1.9-4.3-4.3-4.3s-4.3 1.9-4.3 4.3v17.2c0 2.4 1.9 4.3 4.3 4.3zM50 61.3c-2.4 0-4.3 1.9-4.3 4.3v17.2c0 2.4 1.9 4.3 4.3 4.3s4.3-1.9 4.3-4.3V65.6c0-2.4-1.9-4.3-4.3-4.3z"/>
+    </g>
+  </g>
+
+  <!-- TypeScript Label (Top-Center) -->
+  <g transform="translate(430 140) scale(0.6)">
+    <!-- Hexagon Enamel (Teal) -->
+    <!-- Pantone 326 C -->
+    <path d="M50 0 L100 29 L100 71 L50 100 L0 71 L0 29 Z" fill="#00CED1" class="enamel-shape"/>
+    <!-- "TypeScript" Text (Raised Metal) - converted to paths -->
+    <g class="metal-fill">
+      <path d="M22.8 72.8c-1.3 0-2.4-.4-3.3-1.2-.9-.8-1.4-2-1.4-3.5 0-1.5.5-2.7 1.4-3.6.9-.9 2-1.3 3.3-1.3 1.3 0 2.4.4 3.3 1.3.9.9 1.4 2.1 1.4 3.6 0 1.5-.5 2.7-1.4 3.5-.9.8-2 1.2-3.3 1.2zm-2.4-4.8c-.3-.3-.4-.7-.4-1.2 0-.5.1-.9.4-1.2.3-.3.7-.4 1.2-.4.5 0 .9.1 1.2.4.3.3.4.7.4 1.2 0 .5-.1.9-.4 1.2-.3.3-.7.4-1.2.4-.5 0-.9-.1-1.2-.4zM32.8 72.8c-1.3 0-2.4-.4-3.3-1.2-.9-.8-1.4-2-1.4-3.5 0-1.5.5-2.7 1.4-3.6.9-.9 2-1.3 3.3-1.3 1.3 0 2.4.4 3.3 1.3.9.9 1.4 2.1 1.4 3.6 0 1.5-.5 2.7-1.4 3.5-.9.8-2 1.2-3.3 1.2zm-2.4-4.8c-.3-.3-.4-.7-.4-1.2 0-.5.1-.9.4-1.2.3-.3.7-.4 1.2-.4.5 0 .9.1 1.2.4.3.3.4.7.4 1.2 0 .5-.1.9-.4 1.2-.3.3-.7.4-1.2.4-.5 0-.9-.1-1.2-.4zM42.8 72.8c-1.3 0-2.4-.4-3.3-1.2-.9-.8-1.4-2-1.4-3.5 0-1.5.5-2.7 1.4-3.6.9-.9 2-1.3 3.3-1.3 1.3 0 2.4.4 3.3 1.3.9.9 1.4 2.1 1.4 3.6 0 1.5-.5 2.7-1.4 3.5-.9.8-2 1.2-3.3 1.2zm-2.4-4.8c-.3-.3-.4-.7-.4-1.2 0-.5.1-.9.4-1.2.3-.3.7-.4 1.2-.4.5 0 .9.1 1.2.4.3.3.4.7.4 1.2 0 .5-.1.9-.4 1.2-.3.3-.7.4-1.2.4-.5 0-.9-.1-1.2-.4zM52.8 72.8c-1.3 0-2.4-.4-3.3-1.2-.9-.8-1.4-2-1.4-3.5 0-1.5.5-2.7 1.4-3.6.9-.9 2-1.3 3.3-1.3 1.3 0 2.4.4 3.3 1.3.9.9 1.4 2.1 1.4 3.6 0 1.5-.5 2.7-1.4 3.5-.9.8-2 1.2-3.3 1.2zm-2.4-4.8c-.3-.3-.4-.7-.4-1.2 0-.5.1-.9.4-1.2.3-.3.7-.4 1.2-.4.5 0 .9.1 1.2.4.3.3.4.7.4 1.2 0 .5-.1.9-.4 1.2-.3.3-.7.4-1.2.4-.5 0-.9-.1-1.2-.4z"/>
+    </g>
+  </g>
+
+  <!-- Hugo Hexagon (Top-Right) -->
+  <g transform="translate(680 250) scale(0.65)">
+    <!-- Hexagon Enamel (Orange) -->
+    <!-- Pantone 158 C -->
+    <path d="M50 0 L100 29 L100 71 L50 100 L0 71 L0 29 Z" fill="#FF8C00" class="enamel-shape"/>
+    <!-- Hugo Logo (Raised Metal) - converted to paths -->
+    <g class="metal-fill">
+      <!-- Circle in center (representing the eye from the logo) -->
+      <circle cx="50" cy="50" r="15"/>
+    </g>
+  </g>
+
+  <!-- Hugo Label (Middle-Right) -->
+  <g transform="translate(730 430) scale(0.6)">
+    <!-- Hexagon Enamel (Orange) -->
+    <!-- Pantone 158 C -->
+    <path d="M50 0 L100 29 L100 71 L50 100 L0 71 L0 29 Z" fill="#FF8C00" class="enamel-shape"/>
+    <!-- "Hugo" Text (Raised Metal) - converted to paths -->
+    <g class="metal-fill">
+      <path d="M22.8 72.8c-1.3 0-2.4-.4-3.3-1.2-.9-.8-1.4-2-1.4-3.5 0-1.5.5-2.7 1.4-3.6.9-.9 2-1.3 3.3-1.3 1.3 0 2.4.4 3.3 1.3.9.9 1.4 2.1 1.4 3.6 0 1.5-.5 2.7-1.4 3.5-.9.8-2 1.2-3.3 1.2zm-2.4-4.8c-.3-.3-.4-.7-.4-1.2 0-.5.1-.9.4-1.2.3-.3.7-.4 1.2-.4.5 0 .9.1 1.2.4.3.3.4.7.4 1.2 0 .5-.1.9-.4 1.2-.3.3-.7.4-1.2.4-.5 0-.9-.1-1.2-.4zM32.8 72.8c-1.3 0-2.4-.4-3.3-1.2-.9-.8-1.4-2-1.4-3.5 0-1.5.5-2.7 1.4-3.6.9-.9 2-1.3 3.3-1.3 1.3 0 2.4.4 3.3 1.3.9.9 1.4 2.1 1.4 3.6 0 1.5-.5 2.7-1.4 3.5-.9.8-2 1.2-3.3 1.2zm-2.4-4.8c-.3-.3-.4-.7-.4-1.2 0-.5.1-.9.4-1.2.3-.3.7-.4 1.2-.4.5 0 .9.1 1.2.4.3.3.4.7.4 1.2 0 .5-.1.9-.4 1.2-.3.3-.7.4-1.2.4-.5 0-.9-.1-1.2-.4zM42.8 72.8c-1.3 0-2.4-.4-3.3-1.2-.9-.8-1.4-2-1.4-3.5 0-1.5.5-2.7 1.4-3.6.9-.9 2-1.3 3.3-1.3 1.3 0 2.4.4 3.3 1.3.9.9 1.4 2.1 1.4 3.6 0 1.5-.5 2.7-1.4 3.5-.9.8-2 1.2-3.3 1.2zm-2.4-4.8c-.3-.3-.4-.7-.4-1.2 0-.5.1-.9.4-1.2.3-.3.7-.4 1.2-.4.5 0 .9.1 1.2.4.3.3.4.7.4 1.2 0 .5-.1.9-.4 1.2-.3.3-.7.4-1.2.4-.5 0-.9-.1-1.2-.4zM52.8 72.8c-1.3 0-2.4-.4-3.3-1.2-.9-.8-1.4-2-1.4-3.5 0-1.5.5-2.7 1.4-3.6.9-.9 2-1.3 3.3-1.3 1.3 0 2.4.4 3.3 1.3.9.9 1.4 2.1 1.4 3.6 0 1.5-.5 2.7-1.4 3.5-.9.8-2 1.2-3.3 1.2zm-2.4-4.8c-.3-.3-.4-.7-.4-1.2 0-.5.1-.9.4-1.2.3-.3.7-.4 1.2-.4.5 0 .9.1 1.2.4.3.3.4.7.4 1.2 0 .5-.1.9-.4 1.2-.3.3-.7.4-1.2.4-.5 0-.9-.1-1.2-.4z"/>
+    </g>
+  </g>
+
+  <!-- Windows Hexagon (Bottom-Right) -->
+  <g transform="translate(680 610) scale(0.65)">
+    <!-- Hexagon Enamel (Teal) -->
+    <!-- Pantone 326 C -->
+    <path d="M50 0 L100 29 L100 71 L50 100 L0 71 L0 29 Z" fill="#00CED1" class="enamel-shape"/>
+    <!-- Windows Logo (Enamel segments) -->
+    <!-- Pantone 1795 C (Red) -->
+    <rect x="20" y="20" width="30" height="30" fill="#E0402F" class="enamel-shape-no-stroke"/>
+    <!-- Pantone 368 C (Green) -->
+    <rect x="50" y="20" width="30" height="30" fill="#50A832" class="enamel-shape-no-stroke"/>
+    <!-- Pantone 293 C (Blue) -->
+    <rect x="20" y="50" width="30" height="30" fill="#2076D4" class="enamel-shape-no-stroke"/>
+    <!-- Pantone 123 C (Yellow) -->
+    <rect x="50" y="50" width="30" height="30" fill="#FFC000" class="enamel-shape-no-stroke"/>
+  </g>
+
+  <!-- Apple Hexagon (Bottom-Left) -->
+  <g transform="translate(180 610) scale(0.65)">
+    <!-- Hexagon Enamel (Teal) -->
+    <!-- Pantone 326 C -->
+    <path d="M50 0 L100 29 L100 71 L50 100 L0 71 L0 29 Z" fill="#00CED1" class="enamel-shape"/>
+    <!-- Apple Logo (Silver/Gray Enamel) -->
+    <!-- Pantone Cool Gray 6 C -->
+    <path d="M72.9 14.8C65.5 14.8 59.8 19 56.4 25.1c-6.8-6.1-13.8-6.8-19.8-6.8-12.8 0-23.2 9.8-23.2 23.2 0 11.2 5.1 20.3 13 25.2 7.7 4.7 15.6 5.8 24 5.8 8.6 0 16.5-1.1 24.1-5.9 8.2-5.1 13.5-14.2 13.5-25.2 0-13.4-10.4-23.3-23.2-23.3zM80.2 0c-3.1 0-5.7 1.9-6.9 4.6-.2.4-.2.8-.2 1.3 0 1.2.6 2.3 1.5 3.1 1.7 1.6 3.9 2.5 6.3 2.5s4.6-.9 6.3-2.5c.9-.8 1.5-1.9 1.5-3.1 0-.5 0-.9-.2-1.3-1.2-2.7-3.8-4.6-6.9-4.6z" fill="#C0C0C0" class="enamel-shape-no-stroke"/>
+  </g>
+
+  <!-- Linux Hexagon (Bottom-Center) -->
+  <g transform="translate(430 720) scale(0.6)">
+    <!-- Hexagon Enamel (Teal) -->
+    <!-- Pantone 326 C -->
+    <path d="M50 0 L100 29 L100 71 L50 100 L0 71 L0 29 Z" fill="#00CED1" class="enamel-shape"/>
+    <!-- Tux Penguin (Enamel fills) -->
+    <!-- Pantone Process Black C -->
+    <path d="M50 15 C70 15 80 30 75 50 C80 70 70 85 50 85 C30 85 20 70 25 50 C20 30 30 15 50 15 Z" fill="#000000" class="enamel-shape-no-stroke"/>
+    <!-- Pantone White -->
+    <path d="M50 25 C60 25 65 35 60 45 C65 55 60 65 50 65 C40 65 35 55 40 45 C35 35 40 25 50 25 Z" fill="#FFFFFF" class="enamel-shape-no-stroke"/>
+    <!-- Eyes (Black) -->
+    <!-- Pantone Process Black C -->
+    <circle cx="45" cy="35" r="5" fill="#000000" class="enamel-shape-no-stroke"/>
+    <circle cx="55" cy="35" r="5" fill="#000000" class="enamel-shape-no-stroke"/>
+    <!-- Beak/Feet (Yellow) -->
+    <!-- Pantone 123 C -->
+    <path d="M50 70 C55 75 50 80 45 75 Z" fill="#FFD700" class="enamel-shape-no-stroke"/>
+    <path d="M35 90 C40 95 35 100 30 95 Z" fill="#FFD700" class="enamel-shape-no-stroke"/>
+    <path d="M65 90 C60 95 65 100 70 95 Z" fill="#FFD700" class="enamel-shape-no-stroke"/>
+  </g>
+
+  <!-- Text on Outer Ring (Raised Metal) -->
+  <path id="arcTextPath" d="M500 500 m -400,0 a 400,400 0 1,1 800,0 a 400,400 0 1,1 -800,0" fill="none"/>
+  <text class="metal-fill" font-size="60">
+    <textPath xlink:href="#arcTextPath" startOffset="50%" text-anchor="middle">
+      <tspan dy="-10">SOFTWARE DEVELOPMENT TEAM</tspan>
+      <tspan dy="100" x="500">CODE. COLLABORATE. CONQUER.</tspan>
+    </textPath>
+  </text>
+  <!-- Stars on Outer Ring (Raised Metal) -->
+  <g class="metal-fill">
+    <path d="M120 495 L140 500 L120 505 L135 520 L150 505 L170 500 L150 495 L135 480 Z" transform="rotate(-15, 500, 500)"/>
+    <path d="M120 495 L140 500 L120 505 L135 520 L150 505 L170 500 L150 495 L135 480 Z" transform="rotate(15, 500, 500)"/>
+    <path d="M120 495 L140 500 L120 505 L135 520 L150 505 L170 500 L150 495 L135 480 Z" transform="rotate(165, 500, 500)"/>
+    <path d="M120 495 L140 500 L120 505 L135 520 L150 505 L170 500 L150 495 L135 480 Z" transform="rotate(195, 500, 500)"/>
+  </g>
+
+</svg>
