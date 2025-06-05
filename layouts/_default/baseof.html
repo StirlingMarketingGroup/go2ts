@@ -5,8 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    {{ range resources.Match `node_modules/**` }}
+        {{ .Publish }}
+    {{ end }}
+
     {{ $style := resources.Get "sass/main.scss" | toCSS | minify | fingerprint }}
-    <link rel="stylesheet" href="{{ $style.Permalink }}">
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
 
     <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
     <meta name="description" content="{{ .Params.description }}">
@@ -61,7 +65,7 @@
 
     {{ $opts := dict "target" "es2017" "format" "iife" "minify" true "bundle" true "externals" (slice "fs" "crypto" "os" "util") "loader" (dict "ttf" "data") }}
     {{ $js := resources.Get "js/app.js" | js.Build $opts | fingerprint }}
-    <script src="{{ $js.Permalink }}"></script>
+    <script src="{{ $js.RelPermalink }}"></script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJQYD6K7L7"></script>
