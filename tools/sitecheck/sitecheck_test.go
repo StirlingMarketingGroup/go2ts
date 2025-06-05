@@ -5,61 +5,19 @@ import (
 	"context"
 	"encoding/xml"
 	"fmt"
+	"io"
 	"log/slog"
 	"net/http"
 	"os"
+	"os/exec"
 	"path/filepath"
-	"strings"
 	"testing"
 	"time"
 
-	"github.com/BurntSushi/toml"
 	"github.com/chromedp/cdproto/log"
 	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
 )
-
-// --- helpers ---------------------------------------------------------------
-func listPages() ([]string, error) {
-	// Prefer sitemap if it exists
-	data, err := os.ReadFile("public/sitemap.xml")
-	if err != nil {
-		slog.Warn("sitemap.xml not found, falling back to file system", "error", err)
-		return filepath.Glob("public/**/*.html") // fallback: walk disk
-	}
-	slog.Info("using sitemap.xml to list pages", "count", len(data))
-	// URL represents one <url> entry in the sitemap.
-	type URL struct {
-		Loc string `xml:"loc"`
-	}
-
-	// URLSet wraps all <url> entries.
-	// Note: Because the sitemap’s <urlset> uses a default namespace (xmlns="…"),
-	// you must include that namespace URI in the struct tag in order for Unmarshal to match it.
-	type URLSet struct {
-		XMLName xml.Name `xml:"http://www.sitemaps.org/schemas/sitemap/0.9 urlset"`
-		URLs    []URL    `xml:"url"`
-	}
-
-	sm := URLSet{}
-	if err := xml.Unmarshal(data, &sm); err != nil {
-		return nil, err
-	}
-
-	var cfg HugoConfig
-	if _, err := toml.DecodeFile("./hugo.toml", &cfg); err != nil {
-		return nil, fmt.Errorf("failed to parse hugo.toml: %v", err)
-	}
-
-	out := make([]string, 0, len(sm.URLs))
-	for _, u := range sm.URLs {
-		u := strings.TrimPrefix(u.Loc, cfg.BaseURL) // remove base URL prefix
-
-		slog.Info("found URL in sitemap", "url", u)
-		out = append(out, u)
-	}
-	return out, nil
-}
 
 // --- test entry ------------------------------------------------------------
 func Test_NoRuntimeErrors(t *testing.T) {
@@ -79,17 +37,69 @@ func Test_NoRuntimeErrors(t *testing.T) {
 
 	slog.Info("changed directory to git root", "path", root)
 
-	pages, err := listPages()
-	if err != nil {
-		t.Fatalf("listing pages: %v", err)
-	}
+	baseURL := "http://127.0.0.1:3000"
 
 	// 1) serve static output
-	srv := &http.Server{Addr: ":3000", Handler: http.FileServer(http.Dir("public"))}
-	go srv.ListenAndServe()
-	defer srv.Shutdown(context.Background())
+	cmd := exec.CommandContext(context.Background(),
+		"hugo",
+		"server",
+		"--minify",
+		"--quiet",
+		"-p", "3000",
+		"--bind", "127.0.0.1",
+		"-b", baseURL,
+	)
+	cmd.Stdout, cmd.Stderr = os.Stdout, os.Stderr
+	if err := cmd.Start(); err != nil {
+		t.Fatalf("hugo server: %v", err)
+	}
+	defer cmd.Process.Kill()
 
-	baseURL := "http://localhost:3000/"
+	// wait until the port answers
+	waitFor := func() error {
+		deadline := time.Now().Add(5 * time.Second)
+		for time.Now().Before(deadline) {
+			if _, err := http.Get(baseURL + "/robots.txt"); err == nil {
+				return nil
+			}
+			time.Sleep(200 * time.Millisecond)
+		}
+		return fmt.Errorf("hugo server never became ready on :3000")
+	}
+	if err := waitFor(); err != nil {
+		t.Fatal(err)
+	}
+
+	resp, err := http.Get(baseURL + "/sitemap.xml")
+	if err != nil {
+		t.Fatalf("GET sitemap: %v", err)
+	}
+	data, _ := io.ReadAll(resp.Body)
+	resp.Body.Close()
+
+	// URL represents one <url> entry in the sitemap.
+	type URL struct {
+		Loc string `xml:"loc"`
+	}
+
+	// URLSet wraps all <url> entries.
+	// Note: Because the sitemap’s <urlset> uses a default namespace (xmlns="…"),
+	// you must include that namespace URI in the struct tag in order for Unmarshal to match it.
+	type URLSet struct {
+		XMLName xml.Name `xml:"http://www.sitemaps.org/schemas/sitemap/0.9 urlset"`
+		URLs    []URL    `xml:"url"`
+	}
+
+	sm := URLSet{}
+	if err := xml.Unmarshal(data, &sm); err != nil {
+		t.Fatalf("unmarshal sitemap.xml: %v", err)
+	}
+
+	pages := make([]string, 0, len(sm.URLs))
+	for _, e := range sm.URLs {
+		slog.Info("found page in sitemap", "url", e.Loc)
+		pages = append(pages, e.Loc)
+	}
 
 	// 2) headless Chrome context
 	ctx, cancel := chromedp.NewContext(context.Background())
@@ -151,7 +161,7 @@ func Test_NoRuntimeErrors(t *testing.T) {
 				})
 				return nil
 			}),
-			chromedp.Navigate(baseURL+url),
+			chromedp.Navigate(url),
 			chromedp.WaitReady("body", chromedp.ByQuery),
 		)
 		if err != nil {

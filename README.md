@@ -57,6 +57,15 @@ Those two tools approach this the same way. In fact, one is a fork of the other.
 
 This tool, however, doesn't use Go generation. Instead, we use `go/parser` to parse the provided go into a syntax tree, and then we loop through the `StructType` nodes within the tree to generate our typescript. Doing it this way allows us to convert any struct to typescript via the browser, vs having to tag our structs and generate them all each time. I'm sure their libraries are extremely useful in their workflow, but personally, we like to be a little less coupled than that.
 
+## Build WASM
+
+Before running the site locally or building the project, compile the Go code to WebAssembly:
+
+```bash
+cd assets/go
+GOOS=js GOARCH=wasm go build -o ../../static/lib.wasm
+```
+
 ## Testing
 
 Install front-end dependencies and verify the Hugo build:

@@ -3,3 +3,4 @@
 lib.wasm
 assets/jsconfig.json
 .hugo_build.lock
+.tmp
